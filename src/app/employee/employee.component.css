@@ -1,0 +1,90 @@
+/* 1. Layout: Use Flexbox to put Form and List side-by-side */
+
+
+.container {
+  display: flex;
+  gap: 40px; /* Space between the form and the table */
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  align-items: flex-start; /* Keeps the form at the top */
+}
+
+/* 2. Left Side: The Form Card */
+.form-card {
+  flex: 0 0 350px; /* Don't grow, don't shrink, stay 350px wide */
+  border: 1px solid #e0e0e0;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 3. Right Side: The Employee List Container */
+.list-container {
+  flex: 1; /* Take up all remaining horizontal space */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+/* Form Groups & Buttons */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.button-row { display: flex; gap: 10px; margin-top: 20px; }
+button { padding: 10px 20px; cursor: pointer; border-radius: 6px; font-weight: 500; transition: 0.3s; }
+
+button[type="submit"] { background-color: #28a745; color: white; border: none; }
+button[type="submit"]:hover { background-color: #218838; }
+
+button[type="button"] { background-color: #6c757d; color: white; border: none; } /* Changed Reset to Grey */
+
+button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #f8f9fa;
+  color: #555;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover { background-color: #fcfcfc; }
+
+/* Action Buttons */
+.edit-btn {
+  background-color: #ffc107;
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 5px;
+  border-radius: 4px;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
