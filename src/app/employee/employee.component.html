@@ -1,78 +1,111 @@
-<div class="container">
+<div class="page-wrapper">
 
-  <div class="form-card">
-    <h2>Employee Entry</h2>
-    <form #employeeForm="ngForm" (ngSubmit)="onSubmit(employeeForm)">
-      <input type="hidden" name="_id" [(ngModel)]="employeeService.selectedEmployee._id">
+  <!-- Top Nav-Bar with logout button -->
+  <div class="navbar">
+    <span class="navbar-brand">Employee Manager</span>
+    <button class="logout-btn" (click)="onLogout()">Logout</button>
 
-      <div class="form-group">
-        <label>Name</label>   <!-- [(ngModel)] is used for 2 way binding, if we edit employee, it'll change in both db and in UI -->
-        <input type="text" name="name" [(ngModel)]="employeeService.selectedEmployee.name" #name="ngModel" placeholder="Enter Name" required>
-        <div *ngIf="name.invalid && name.touched" style="color: red;">Name is required</div>
-      </div>
-
-      <div class="form-group">
-        <label>Position</label>
-        <input type="text" name="position" [(ngModel)]="employeeService.selectedEmployee.position" #position="ngModel" placeholder="Position" required>
-        <div *ngIf="position.invalid && position.touched" style="color: red;">Position is required</div>
-      </div>
-
-      <div class="form-group">
-        <label>Office</label>
-        <input type="text" name="office" [(ngModel)]="employeeService.selectedEmployee.office" #office="ngModel" placeholder="Office Location" required>
-        <div *ngIf="office.invalid && office.touched" style="color:  red;">Office is required</div>
-      </div>
-
-      <div class="form-group">
-        <label>Salary</label>
-        <input type="number" name="salary" [(ngModel)]="employeeService.selectedEmployee.salary" #salary="ngModel" placeholder="Salary" required>
-        <div *ngIf="salary.invalid && salary.touched" style="color: red;">Salary is required</div>
-        <div *ngIf="salary.value <= 0 && salary.touched" style="color: red;">Salary must be greater than 0</div>
-      </div>
-
-      <div class="button-row">
-        <button type="submit" [disabled]="!employeeForm.valid">Submit</button>
-        <!-- <button type="button" (click)="resetForm(employeeForm)">Reset</button> -->
-         <button type="button" (click)="resetForm(employeeForm)">Reset</button>
-      </div>
-    </form>
   </div>
 
-  <div class="list-container">
-    <h3>Employee List</h3>
-    <div class="search-bar">
-      <input type="text" [(ngModel)]="searchText" placeholder="Seach by name or position">
+
+
+  <div class="container">
+    <div class="form-card">
+      <h2>Employee Entry</h2>
+      <form #employeeForm="ngForm" (ngSubmit)="onSubmit(employeeForm)">
+        <input type="hidden" name="_id" [(ngModel)]="employeeService.selectedEmployee._id">
+
+        <div class="form-group">
+          <label>Name</label>   <!-- [(ngModel)] is used for 2 way binding, if we edit employee, it'll change in both db and in UI -->
+          <input type="text" name="name" [(ngModel)]="employeeService.selectedEmployee.name" #name="ngModel" placeholder="Enter Name" required>
+          <div *ngIf="name.invalid && name.touched" style="color: red;">Name is required</div>
+        </div>
+
+        <div class="form-group">
+          <label>Position</label>
+          <input type="text" name="position" [(ngModel)]="employeeService.selectedEmployee.position" #position="ngModel" placeholder="Position" required>
+          <div *ngIf="position.invalid && position.touched" style="color: red;">Position is required</div>
+        </div>
+
+        <div class="form-group">
+          <label>Office</label>
+          <input type="text" name="office" [(ngModel)]="employeeService.selectedEmployee.office" #office="ngModel" placeholder="Office Location" required>
+          <div *ngIf="office.invalid && office.touched" style="color:  red;">Office is required</div>
+        </div>
+
+        <div class="form-group">
+          <label>Salary</label>
+          <input type="number" name="salary" [(ngModel)]="employeeService.selectedEmployee.salary" #salary="ngModel" placeholder="Salary" required>
+          <div *ngIf="salary.invalid && salary.touched" style="color: red;">Salary is required</div>
+          <div *ngIf="salary.value <= 0 && salary.touched" style="color: red;">Salary must be greater than 0</div>
+        </div>
+
+        <div class="button-row">
+          <button type="submit" [disabled]="!employeeForm.valid">Submit</button>
+          <!-- <button type="button" (click)="resetForm(employeeForm)">Reset</button> -->
+          <button type="button" (click)="resetForm(employeeForm)">Reset</button>
+        </div>
+      </form>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Position</th>
-          <th>Office</th>
-          <th>Salary</th>
-          <th></th>
-        </tr>
-      </thead>
 
-      <tbody>
-        <tr *ngFor="let emp of employeeService.employees | employeeFilter:searchText; trackBy: trackById">
-          <td>{{emp.name}}</td>
-          <td>{{emp.position}}</td>
-          <td>{{emp.office}}</td>
-          <td>{{emp.salary}}</td>
-          <td class="action-buttons">
-            <button class="edit-btn" (click)="onEdit(emp)">Edit</button>
-            <button class="delete-btn" (click)="onDelete(emp._id)">Delete</button>
-          </td>
-        </tr>
+    <div class="list-container">
+      <h3>Employee List</h3>
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" [(ngModel)]="searchText" (ngModelChange)="onSearch()" placeholder="Seach by name or position">
+        </div>
+      </div>
+          <table>
+            <thead>
+              <tr>
+                <th (click)="onSort('name')">Name
+                  <span *ngIf="sortColumn=== 'name' && sortDirection==='asc'">↑</span>
+                  <span *ngIf="sortColumn==='name' && sortDirection==='desc'">↓</span>
+                </th>
+                <th>Position</th>
+                <th>Office</th>
+                <th (click)="onSort('salary')">Salary
+                  <span *ngIf="sortColumn=== 'salary' && sortDirection==='asc'">↑</span>
+                  <span *ngIf="sortColumn==='salary' && sortDirection==='desc'">↓</span>
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+        <tbody>
+          <tr *ngFor="let emp of getPaginatedEmployees() | employeeFilter:searchText; trackBy: trackById">
+            <td>{{emp.name}}</td>
+            <td>{{emp.position}}</td>
+            <td>{{emp.office}}</td>
+            <td>{{emp.salary}}</td>
+            <td class="action-buttons">
+              <button class="edit-btn" (click)="onEdit(emp)">Edit</button>
+              <button class="delete-btn" (click)="onDelete(emp._id)">Delete</button>
+            </td>
+          </tr>
 
-        <tr *ngIf="(employeeService.employees | employeeFilter:searchText).length === 0">
-          <td colspan="5">No employee found in database</td>
-        </tr>
-      </tbody>
-    </table>
+          <tr *ngIf="(getPaginatedEmployees() | employeeFilter:searchText).length === 0">
+            <td colspan="5">No employee found in database</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button [disabled]="currentPage==1" (click)="prevPage()">Previous</button>
+        <span>Page {{currentPage}} of {{totalPage()}}</span>
+        <button [disabled]="currentPage==totalPage()" (click)="nextPage()">Next</button>
+      </div>
+    </div>
+
+
+    <div [class]="'toast ' + toastService.type" *ngIf="toastService.show">
+      <span>{{toastService.message}}</span>
+    </div>
+
+
   </div>
-
 </div>
 
 <!-- ### Why this fixes the layout:

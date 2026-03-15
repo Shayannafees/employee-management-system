@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 // import 'rxjs/add/operator/toPromise';
 import { Employee } from './employee.model';
+import { environment } from '../../environments/environment';
+
 
 //injectable decorator
 @Injectable({
@@ -15,7 +17,7 @@ import { Employee } from './employee.model';
 export class EmployeeService {
   selectedEmployee: Employee = new Employee();      //creating an instance of Employee class model
   employees: Employee[] = [];
-  readonly baseURL = 'http://localhost:3000/employees'; //  our Node JS API endpoint/port!
+  readonly baseURL = environment.apiUrl + '/employees'; //  our Node JS API endpoint/port!
 
   constructor(private http: HttpClient) { }
 

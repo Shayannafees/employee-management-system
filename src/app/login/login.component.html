@@ -1,0 +1,9 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Login</h2>
+    <input type="text" name="email" [(ngModel)]="email" placeholder="Type your email">
+    <input type="password" name="password" [(ngModel)]="password" placeholder="Type your password">
+    <span class="errorMessage" *ngIf="errorMessage">{{errorMessage}}</span>
+    <button class="loginBtn" (click)="onLogin()">Login</button>
+  </div>
+</div>

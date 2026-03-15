@@ -4,6 +4,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Employee } from '../shared/employee.model';
 import { CommonModule } from '@angular/common';
 import { EmployeeFilterPipe } from '../shared/employee-filter.pipe';
+import { Router } from '@angular/router';
+import { ToastService } from '../shared/toast.service';
 
 
 
@@ -17,14 +19,90 @@ import { EmployeeFilterPipe } from '../shared/employee-filter.pipe';
 })
 export class EmployeeComponent implements OnInit {
 
+  //for search/filter
   searchText: string= '';
 
-  constructor(public employeeService: EmployeeService) {}       //sees employeeService, create instance, injects into component, this is called Dependency Injection (DI)
+  //for sorting up and done
+  sortColumn = '';
+  sortDirection = 'asc';
+
+  //pagination
+  currentPage = 1;
+  pageSize = 5;
+
+  // //toast
+  // toastMessage = '';
+  // toastType = '';
+  // showToast: boolean = false;
+
+
+
+  constructor(
+    public employeeService: EmployeeService,
+    private router: Router,
+    public toastService: ToastService
+  ) {}       //sees employeeService, create instance, injects into component, this is called Dependency Injection (DI)
 
   ngOnInit() {                                    // it'll run once when component loads
     this.resetForm();
     this.refreshEmployeeList();
   }
+
+
+  onSort(column: string){
+    this.sortColumn = column;
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+
+  }
+
+  getSortedEmployees(){
+    if (!this.sortColumn){
+      return this.employeeService.employees;
+    }
+    //make a copy by using spread operator so we don't mess with original array of employee
+    let sorted = [...this.employeeService.employees];
+    let direction = this.sortDirection === 'asc' ? 1 : -1
+    //sort it
+    sorted.sort((a:any, b:any) =>{
+      let valueA = a[this.sortColumn];
+      let valueB = b[this.sortColumn];
+
+      if (valueA > valueB) return 1 * direction;
+      if (valueB > valueA) return -1 * direction;
+      return 0;
+    });
+
+    return sorted
+
+  }
+
+  totalPage(){
+    return Math.ceil(this.employeeService.employees.length / this.pageSize)
+  }
+
+
+  nextPage(){
+    if (this.currentPage < this.totalPage()){
+      this.currentPage += 1;
+    }
+  }
+
+  prevPage(){
+    if (this.currentPage > 1){
+      this.currentPage -= 1;
+    }
+  }
+
+
+  getPaginatedEmployees(){
+    let start = (this.currentPage - 1) * this.pageSize;
+    let end = start + this.pageSize
+    return this.getSortedEmployees().slice(start, end);
+  }
+
+    onSearch(){
+      this.currentPage = 1;
+    }
 
   trackById(index: number, emp: Employee){
     return emp._id;
@@ -48,7 +126,8 @@ export class EmployeeComponent implements OnInit {
   afterSave(form: NgForm, message: string){
     this.resetForm(form);                       //clears form
     this.refreshEmployeeList();                 //fetch updated data
-    alert(message);                             //message show
+    // this.showToastMessage(message, 'success');                             //message show
+    this.toastService.showToast(message, 'success')
   }
 
   //Refresh employee List method
@@ -76,7 +155,8 @@ export class EmployeeComponent implements OnInit {
   if (confirm('Are you sure you want to delete this record?')) {    //confirmation dialog
     this.employeeService.deleteEmployee(_id).subscribe((res) => {
       this.refreshEmployeeList();                                   //to update UI with fresh list of emp
-      alert("Deleted successfully");                                //message
+      // this.showToastMessage('Deleted successfully', 'danger');                                //message
+      this.toastService.showToast('Deleted Successfully', 'danger');
     });
   }
 }
@@ -97,7 +177,22 @@ export class EmployeeComponent implements OnInit {
       salary: 0
     };
   }
+
+  // showToastMessage(message:string, type: string){
+  //   this.toastMessage = message;
+  //   this.toastType = type;
+  //   this.showToast = true;
+  //   setTimeout(()=> {
+  //     this.showToast = false
+  //   }, 3000)
+  // }
+
+  onLogout(){
+    localStorage.removeItem('isLoggedIn');
+    this.router.navigate(['/login']);
+  }
 }
+
 
 
 

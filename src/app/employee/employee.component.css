@@ -1,5 +1,43 @@
-/* 1. Layout: Use Flexbox to put Form and List side-by-side */
+.page-wrapper{
+  min-height: 100vh;
+  background-color: #f4f6f9;
+}
 
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 32px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 24px;
+}
+
+.navbar-brand{
+  font-size: 18px;
+  font-weight: 700;
+  color: #4361ee;
+}
+
+.logout-btn{
+  padding: 8px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-btn:hover{
+  background-color: #c82333;
+}
+
+/* 1. Layout: Use Flexbox to put Form and List side-by-side */
+h2, h3{
+  margin-bottom: 20px;
+  color: #333;
+}
 
 .container {
   display: flex;
@@ -16,7 +54,7 @@
   padding: 30px;
   border-radius: 12px;
   background-color: #ffffff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
 /* 3. Right Side: The Employee List Container */
@@ -26,6 +64,7 @@
   padding: 20px;
   border-radius: 12px;
   border: 1px solid #e0e0e0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 /* Form Groups & Buttons */
@@ -49,10 +88,16 @@ button[type="button"] { background-color: #6c757d; color: white; border: none; }
 
 button:disabled { background-color: #ccc; cursor: not-allowed; }
 
+button:hover{
+  transform: translateY(-1px);
+}
+
 /* Table Styling */
 table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 th {
@@ -69,7 +114,7 @@ th, td {
   border-bottom: 1px solid #eee;
 }
 
-tr:hover { background-color: #fcfcfc; }
+tr:hover { background-color: #f8f9fb; }
 
 /* Action Buttons */
 .edit-btn {
@@ -87,4 +132,106 @@ tr:hover { background-color: #fcfcfc; }
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
+}
+
+.search-bar{
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-bar input{
+  width: 260px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.25s ease;
+  background-color: #fafafa;
+}
+
+/* #focuseffect */
+.search-bar input:focus{
+  border-color: #007bff;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.search-wrapper{
+  position: relative;
+}
+
+.search-icon{
+  position: absolute;
+  left: 10px;
+  top: 9px;
+  font-size: 14px;
+  color: #888;
+}
+
+.search-wrapper input{
+  padding-left: 32px;
+}
+
+.pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 12px;
+}
+
+.pagination button{
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #4361ee;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pagination button:hover:not([disabled]){
+  background-color: #3a56d4;
+}
+
+.pagination button:disabled{
+  background-color: #c0c0c0;
+  cursor: not-allowed;
+}
+
+.pagination span{
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+
+.toast{
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  padding: 14px 24x;
+  border-radius: 2px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.toast.success{
+  background-color: #28a745;
+}
+
+.toast.danger{
+  background-color: #dc3545;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
