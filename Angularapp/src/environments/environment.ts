@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'http://localhost:3000'
+  apiUrl: 'https://employee-management-system-production-1b96.up.railway.app'
 };
