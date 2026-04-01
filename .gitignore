@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+Angularapp/node_modules/
+NodeJS/node_modules/
+
+# Angular build
+Angularapp/dist/
+Angularapp/.angular/
+
+# Environment
+.env
+
+# OS files
+.DS_Store
+desktop.ini
+
+# Logs
+*.log
