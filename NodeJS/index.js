@@ -12,13 +12,13 @@ var app = express();        //express function is saved inside variable app
 
 
 app.use(bodyparser.json());
-app.use(cors({ origin: ['http://localhost:4200', 'http://localhost'] })); // Allow your Angular port
+app.use(cors({ origin: ['http://localhost:4200', 'http://localhost', 'https://employee-management-system-rho-silk.vercel.app'] })); // Allow your Angular port
 
 
 const SECRET_KEY = 'mySecretKey123';
 
 
-// sending jwt token to user/localstorage   
+// sending jwt token to user/localstorage
 app.post('/login', (req, res)=>{
     const {email, password} = req.body;
     if (email == 'admin@TestBed.com' && password=='1234'){
