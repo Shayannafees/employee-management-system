@@ -3,6 +3,9 @@ const cors = require('cors'); // Import cors
 const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
 
+const bcrypt = require('bcryptjs');
+var User = require('./models/user.js');
+
 require('./db.js');      //importing db.js file and establishing connection with mongodb
 
 var employeeController = require('./controllers/employeeController.js');
@@ -19,13 +22,27 @@ const SECRET_KEY = 'mySecretKey123';
 
 
 // sending jwt token to user/localstorage
-app.post('/login', (req, res)=>{
-    const {email, password} = req.body;
-    if (email == 'admin@TestBed.com' && password=='1234'){
-        const token = jwt.sign({email: email}, SECRET_KEY, {expiresIn: '1h'});
-        res.json({token: token});
-    } else {
-        res.status(401).json({message: 'Invalid Credentials'});
+app.post('/login', async (req, res)=>{
+    try {
+        const {email, password} = req.body;
+
+        //find user in database
+        const user = await User.findOne({email});
+        if (!user){
+            return res.status(401).json({message: 'Invalid Credentials'});
+        }
+
+        //compare password with hashed password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch){
+            return res.status(401).json({message: 'Invalid Credentials'});
+        }
+
+        //create token
+        const token = jwt.sign({email: user.email}, SECRET_KEY, {expiresIn: '1h'});
+        res.json({token});
+    } catch (err){
+        res.status(500).json({message: 'Server Error!'})
     }
 });
 
@@ -50,3 +67,27 @@ const verifyToken = (req, res, next) => {
 };
 
 app.use('/employees', verifyToken, employeeController);
+
+
+app.post('/register', async(req,res)=>{
+    try {
+        const {email, password} = req.body;
+
+        //check if user already exist
+        const existingUser = await User.findOne({email});
+
+        if (existingUser){
+            return res.status(400).json({message: 'Email already Registered'});
+        }
+        //hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        //save new user
+        const user = new User({email, password: hashedPassword});
+        await user.save();
+
+        res.status(201).json({message: 'User registered successfully'});
+    } catch (err){
+        res.status(500).json({message: 'Server error'});
+    }
+});

@@ -1,0 +1,12 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Register</h2>
+    <input type="text" name="email" [(ngModel)]="email" placeholder="Type your Email">
+    <input type="password" name="password" [(ngModel)]="password" placeholder="Password">
+    <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" placeholder="Confirm Password">
+    <span class="errorMessage" *ngIf="errorMessage">{{errorMessage}}</span>
+    <span class="successMessage" *ngIf="successMessage">{{successMessage}}</span>
+    <button class="register-btn" (click)="onRegister()">Register</button>
+    <p>Already have an account? <a (click)="goToLogin()">Login here</a></p>
+  </div>
+</div>
